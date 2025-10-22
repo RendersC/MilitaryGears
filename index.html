@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>TacticalGear</title>
+  <link rel="stylesheet" href="styles/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="logo">TacticalGear</div>
+    <nav>
+      <ul id="menu" tabindex="0" aria-label="Main menu">
+        <li><a href="#home" data-index="0">Home</a></li>
+        <li><a href="#catalog" data-index="1">Catalog</a></li>
+        <li><a href="#about" data-index="2">About</a></li>
+      </ul>
+    </nav>
+    <div class="header-controls">
+      <button id="themeToggle" class="btn" aria-pressed="false">Night</button>
+      <button id="openLogin" class="btn secondary">Login</button>
+    </div>
+  </header>
+
+  <main class="container" id="home">
+    <section class="grid">
+      <article class="product" id="productCard">
+        <img id="bigImage" class="bigimg" src="assets/gear1.jpg" alt="product image">
+        <div class="gallery" id="gallery">
+          <img class="thumb selected" src="assets/gear1-thumb.jpg" data-src="assets/gear1.jpg" alt="thumb1">
+          <img class="thumb" src="assets/gear2-thumb.jpg" data-src="assets/gear2.jpg" alt="thumb2">
+          <img class="thumb" src="assets/gear3-thumb.jpg" data-src="assets/gear3.jpg" alt="thumb3">
+        </div>
+
+        <h2 id="title">Tactical Backpack — Model X</h2>
+        <p id="price">SKU: TG-2025 — <strong>$129</strong></p>
+
+        <div>
+          <div class="stars" id="stars" aria-label="rating">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+          </div>
+          <span id="ratingValue" class="muted">(0)</span>
+        </div>
+
+        <div class="controls">
+          <button id="timeBtn" class="btn">Show Time</button>
+          <button id="readBtn" class="btn">Read More</button>
+          <button id="soundBtn" class="btn sound-btn">🔔 Notify</button>
+        </div>
+
+        <p id="shortDesc">Lightweight, durable platform for your gear. Great for hiking & training.</p>
+        <p id="more" class="readmore">Extended description: 600D nylon, adjustable straps, water-resistant coating, MOLLE compatible compartments.</p>
+
+        <hr>
+
+        <form id="contactForm" class="form">
+          <label>Name: <input name="name" required></label><br>
+          <label>Email: <input name="email" type="email" required></label><br>
+          <button class="btn" type="submit">Send Inquiry</button>
+        </form>
+
+      </article>
+
+      <aside>
+        <div class="product filters">
+          <h3>Filters</h3>
+          <select id="filterSelect">
+            <option value="all">All categories</option>
+            <option value="backpacks">Backpacks</option>
+            <option value="belts">Belts</option>
+            <option value="lights">Lights</option>
+          </select>
+
+          <div style="margin-top:12px">
+            <h4>Greeting</h4>
+            <p id="greet">Hello!</p>
+            <input id="nameInput" placeholder="Enter name" />
+            <button class="btn" id="greetBtn">Update</button>
+          </div>
+        </div>
+
+        <div class="product">
+          <h3>Catalog (dynamic)</h3>
+          <div id="catalog" aria-live="polite"></div>
+          <button id="loadMore" class="btn">Load more</button>
+        </div>
+      </aside>
+    </section>
+
+    <section class="report card" id="report">
+      <h3>Interactivity checklist</h3>
+      <ul>
+        <li>Theme: Day/Night</li>
+        <li>Gallery: thumbnail clicks change main image</li>
+        <li>Read More: toggles extra text</li>
+        <li>Rating: click stars, visual & numeric update</li>
+        <li>Form: async submit simulation</li>
+        <li>Keyboard nav: menu arrows</li>
+        <li>Filter: switch with switch statement</li>
+        <li>Sound: notification using Web Audio</li>
+        <li>Animations: CSS transitions/transform</li>
+      </ul>
+    </section>
+  </main>
+
+<section class="container hidden" id="catalog">
+  <div class="catalog-grid">
+    <!-- Products will be added here dynamically -->
+  </div>
+</section>
+
+
+
+  <footer>
+    Demo site — sells only non-lethal tactical gear and accessories.
+    <section class="container hidden" id="about">
+  <div class="product">
+    <h2>About TacticalGear</h2>
+    <p>We are a specialized retailer of high-quality tactical equipment and gear for outdoor activities, hiking, and training.</p>
+    
+    <h3>Our Mission</h3>
+    <p>To provide reliable and durable tactical gear for outdoor enthusiasts and professionals.</p>
+    
+    <h3>Contact Information</h3>
+    <p>Email: info@tacticalgear.example</p>
+    <p>Phone: (555) 123-4567</p>
+    <p>Address: 123 Tactical Street, Gear City</p>
+  </div>
+    </section>
+  </footer>
+
+  <!-- Login / Register modal (hidden by default) -->
+  <div id="authModal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true">
+      <button id="closeAuth" class="close">&times;</button>
+      <div class="auth-tabs">
+        <button id="tabLogin" class="tab active">Login</button>
+        <button id="tabRegister" class="tab">Register</button>
+      </div>
+
+      <div id="loginForm" class="auth-form">
+        <h4>Login</h4>
+        <form id="formLogin">
+          <label>Email: <input name="email" type="email" required></label><br>
+          <label>Password: <input name="password" type="password" minlength="6" required></label><br>
+          <button class="btn" type="submit">Login</button>
+        </form>
+      </div>
+
+      <div id="registerForm" class="auth-form hidden">
+        <h4>Register</h4>
+        <form id="formRegister">
+          <label>Name: <input name="name" required></label><br>
+          <label>Email: <input name="email" type="email" required></label><br>
+          <label>Password: <input name="password" type="password" minlength="6" required></label><br>
+          <label>Confirm: <input name="confirm" type="password" minlength="6" required></label><br>
+          <button class="btn" type="submit">Register</button>
+        </form>
+      </div>
+
+      <div id="authMsg" class="muted" role="status"></div>
+    </div>
+  </div>
+  
+  <script src="js/auth.js" defer></script>
+  <script src="js/app.js" defer></script>
+</body>
+</html>
