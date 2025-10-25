@@ -1,172 +1,266 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>TacticalGear</title>
-  <link rel="stylesheet" href="styles/styles.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Military Store — учебный фронтенд</title>
+
+  <!-- стили -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- jQuery (CDN) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <!-- наш скрипт -->
+  <script src="script.js" defer></script>
 </head>
 <body>
+  <!-- Прогресс-бар скролла -->
+  <div id="progress-bar" aria-hidden="true"></div>
+
   <header class="site-header">
-    <div class="logo">TacticalGear</div>
-    <nav>
-      <ul id="menu" tabindex="0" aria-label="Main menu">
-        <li><a href="#home" data-index="0">Home</a></li>
-        <li><a href="#catalog" data-index="1">Catalog</a></li>
-        <li><a href="#about" data-index="2">About</a></li>
-      </ul>
-    </nav>
-    <div class="header-controls">
-      <button id="themeToggle" class="btn" aria-pressed="false">Night</button>
-      <button id="openLogin" class="btn secondary">Login</button>
+    <div class="header-left">
+      <h1>Military Store</h1>
+      <div class="search-wrap">
+        <input id="search-bar" type="search" placeholder="Поиск товаров... (живой фильтр + подсказки)" aria-label="Search products">
+        <div id="suggestions" class="suggestions" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div class="header-right">
+      <button id="theme-toggle" class="btn">🌙 Тёмная тема</button>
+      <button id="open-cart" class="btn">🛒 Корзина</button>
     </div>
   </header>
 
-  <main class="container" id="home">
-    <section class="grid">
-      <article class="product" id="productCard">
-        <img id="bigImage" class="bigimg" src="assets/gear1.jpg" alt="product image">
-        <div class="gallery" id="gallery">
-          <img class="thumb selected" src="assets/gear1-thumb.jpg" data-src="assets/gear1.jpg" alt="thumb1">
-          <img class="thumb" src="assets/gear2-thumb.jpg" data-src="assets/gear2.jpg" alt="thumb2">
-          <img class="thumb" src="assets/gear3-thumb.jpg" data-src="assets/gear3.jpg" alt="thumb3">
+  <main class="container">
+    <!-- фильтры кратко (demo) -->
+    <nav class="filters">
+      <label>Категория:
+        <select id="filter-category">
+          <option value="">Все</option>
+          <option value="rifle">Винтовки</option>
+          <option value="pistol">Пистолеты</option>
+          <option value="sniper">Снайпер</option>
+        </select>
+      </label>
+      <label>Только в наличии:
+        <input type="checkbox" id="filter-stock">
+      </label>
+    </nav>
+
+    <!-- Секция товаров -->
+    <section id="product-list" class="grid">
+      <!-- Карточки товаров - data-* атрибуты используются для поиска/фильтров -->
+      <article class="product-card" data-name="AK-47" data-category="rifle" data-price="1200" data-instock="1" data-id="p1">
+        <div class="media">
+          <img data-src="images/gun1.jpg" alt="AK-47" class="lazy" />
         </div>
-
-        <h2 id="title">Tactical Backpack — Model X</h2>
-        <p id="price">SKU: TG-2025 — <strong>$129</strong></p>
-
-        <div>
-          <div class="stars" id="stars" aria-label="rating">
-            <span class="star" data-value="1">★</span>
-            <span class="star" data-value="2">★</span>
-            <span class="star" data-value="3">★</span>
-            <span class="star" data-value="4">★</span>
-            <span class="star" data-value="5">★</span>
+        <div class="content">
+          <h3 class="product-title">AK-47</h3>
+          <p class="desc">Классическая штурмовая винтовка.</p>
+          <div class="meta">
+            <span class="price">₸1200</span>
+            <div class="rating" data-product="p1">
+              <div class="stars" aria-label="Оцените товар">
+                <span class="star" data-value="1">☆</span>
+                <span class="star" data-value="2">☆</span>
+                <span class="star" data-value="3">☆</span>
+                <span class="star" data-value="4">☆</span>
+                <span class="star" data-value="5">☆</span>
+              </div>
+              <div class="rating-meta"><span class="avg">—</span> · <span class="count">0</span></div>
+            </div>
           </div>
-          <span id="ratingValue" class="muted">(0)</span>
+
+          <div class="card-actions">
+            <button class="btn add-cart">Add to Cart</button>
+            <button class="btn copy-btn" data-target="#snippet-p1">Copy desc</button>
+          </div>
+
+          <pre id="snippet-p1" class="snippet" hidden>AK-47 — классическая штурмовая винтовка.</pre>
         </div>
-
-        <div class="controls">
-          <button id="timeBtn" class="btn">Show Time</button>
-          <button id="readBtn" class="btn">Read More</button>
-          <button id="soundBtn" class="btn sound-btn">🔔 Notify</button>
-        </div>
-
-        <p id="shortDesc">Lightweight, durable platform for your gear. Great for hiking & training.</p>
-        <p id="more" class="readmore">Extended description: 600D nylon, adjustable straps, water-resistant coating, MOLLE compatible compartments.</p>
-
-        <hr>
-
-        <form id="contactForm" class="form">
-          <label>Name: <input name="name" required></label><br>
-          <label>Email: <input name="email" type="email" required></label><br>
-          <button class="btn" type="submit">Send Inquiry</button>
-        </form>
-
       </article>
 
-      <aside>
-        <div class="product filters">
-          <h3>Filters</h3>
-          <select id="filterSelect">
-            <option value="all">All categories</option>
-            <option value="backpacks">Backpacks</option>
-            <option value="belts">Belts</option>
-            <option value="lights">Lights</option>
-          </select>
-
-          <div style="margin-top:12px">
-            <h4>Greeting</h4>
-            <p id="greet">Hello!</p>
-            <input id="nameInput" placeholder="Enter name" />
-            <button class="btn" id="greetBtn">Update</button>
+      <article class="product-card" data-name="M4A1" data-category="rifle" data-price="1400" data-instock="1" data-id="p2">
+        <div class="media">
+          <img data-src="images/gun2.jpg" alt="M4A1" class="lazy" />
+        </div>
+        <div class="content">
+          <h3 class="product-title">M4A1</h3>
+          <p class="desc">Лёгкая и точная штурмовая винтовка.</p>
+          <div class="meta">
+            <span class="price">₸1400</span>
+            <div class="rating" data-product="p2">
+              <div class="stars">
+                <span class="star" data-value="1">☆</span>
+                <span class="star" data-value="2">☆</span>
+                <span class="star" data-value="3">☆</span>
+                <span class="star" data-value="4">☆</span>
+                <span class="star" data-value="5">☆</span>
+              </div>
+              <div class="rating-meta"><span class="avg">—</span> · <span class="count">0</span></div>
+            </div>
           </div>
-        </div>
 
-        <div class="product">
-          <h3>Catalog (dynamic)</h3>
-          <div id="catalog" aria-live="polite"></div>
-          <button id="loadMore" class="btn">Load more</button>
+          <div class="card-actions">
+            <button class="btn add-cart">Add to Cart</button>
+            <button class="btn copy-btn" data-target="#snippet-p2">Copy desc</button>
+          </div>
+
+          <pre id="snippet-p2" class="snippet" hidden>M4A1 — лёгкая и точная штурмовая винтовка.</pre>
         </div>
-      </aside>
+      </article>
+
+      <article class="product-card" data-name="Glock-19" data-category="pistol" data-price="600" data-instock="1" data-id="p3">
+        <div class="media">
+          <img data-src="images/gun3.jpg" alt="Glock-19" class="lazy" />
+        </div>
+        <div class="content">
+          <h3 class="product-title">Glock-19</h3>
+          <p class="desc">Надёжный полуавтоматический пистолет.</p>
+          <div class="meta">
+            <span class="price">₸600</span>
+            <div class="rating" data-product="p3">
+              <div class="stars">
+                <span class="star" data-value="1">☆</span>
+                <span class="star" data-value="2">☆</span>
+                <span class="star" data-value="3">☆</span>
+                <span class="star" data-value="4">☆</span>
+                <span class="star" data-value="5">☆</span>
+              </div>
+              <div class="rating-meta"><span class="avg">—</span> · <span class="count">0</span></div>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn add-cart">Add to Cart</button>
+            <button class="btn copy-btn" data-target="#snippet-p3">Copy desc</button>
+          </div>
+
+          <pre id="snippet-p3" class="snippet" hidden>Glock-19 — надёжный полуавтоматический пистолет.</pre>
+        </div>
+      </article>
+
+      <article class="product-card" data-name="Desert Eagle" data-category="pistol" data-price="900" data-instock="0" data-id="p4">
+        <div class="media">
+          <img data-src="images/gun4.jpg" alt="Desert Eagle" class="lazy" />
+        </div>
+        <div class="content">
+          <h3 class="product-title">Desert Eagle</h3>
+          <p class="desc">Мощный пистолет большой калибр.</p>
+          <div class="meta">
+            <span class="price">₸900</span>
+            <div class="rating" data-product="p4">
+              <div class="stars">
+                <span class="star" data-value="1">☆</span>
+                <span class="star" data-value="2">☆</span>
+                <span class="star" data-value="3">☆</span>
+                <span class="star" data-value="4">☆</span>
+                <span class="star" data-value="5">☆</span>
+              </div>
+              <div class="rating-meta"><span class="avg">—</span> · <span class="count">0</span></div>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn add-cart">Add to Cart</button>
+            <button class="btn copy-btn" data-target="#snippet-p4">Copy desc</button>
+          </div>
+
+          <pre id="snippet-p4" class="snippet" hidden>Desert Eagle — мощный пистолет большого калибра.</pre>
+        </div>
+      </article>
+
+      <article class="product-card" data-name="AWP" data-category="sniper" data-price="2500" data-instock="1" data-id="p5">
+        <div class="media">
+          <img data-src="images/gun5.jpg" alt="AWP" class="lazy" />
+        </div>
+        <div class="content">
+          <h3 class="product-title">AWP</h3>
+          <p class="desc">Снайперская винтовка высокой точности.</p>
+          <div class="meta">
+            <span class="price">₸2500</span>
+            <div class="rating" data-product="p5">
+              <div class="stars">
+                <span class="star" data-value="1">☆</span>
+                <span class="star" data-value="2">☆</span>
+                <span class="star" data-value="3">☆</span>
+                <span class="star" data-value="4">☆</span>
+                <span class="star" data-value="5">☆</span>
+              </div>
+              <div class="rating-meta"><span class="avg">—</span> · <span class="count">0</span></div>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn add-cart">Add to Cart</button>
+            <button class="btn copy-btn" data-target="#snippet-p5">Copy desc</button>
+          </div>
+
+          <pre id="snippet-p5" class="snippet" hidden>AWP — снайперская винтовка высокой точности.</pre>
+        </div>
+      </article>
+
+      <article class="product-card" data-name="Shotgun" data-category="rifle" data-price="800" data-instock="1" data-id="p6">
+        <div class="media">
+          <img data-src="images/gun6.jpg" alt="Shotgun" class="lazy" />
+        </div>
+        <div class="content">
+          <h3 class="product-title">Shotgun</h3>
+          <p class="desc">Надёжное огнестрельное ружьё.</p>
+          <div class="meta">
+            <span class="price">₸800</span>
+            <div class="rating" data-product="p6">
+              <div class="stars">
+                <span class="star" data-value="1">☆</span>
+                <span class="star" data-value="2">☆</span>
+                <span class="star" data-value="3">☆</span>
+                <span class="star" data-value="4">☆</span>
+                <span class="star" data-value="5">☆</span>
+              </div>
+              <div class="rating-meta"><span class="avg">—</span> · <span class="count">0</span></div>
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn add-cart">Add to Cart</button>
+            <button class="btn copy-btn" data-target="#snippet-p6">Copy desc</button>
+          </div>
+
+          <pre id="snippet-p6" class="snippet" hidden>Shotgun — надёжное огнестрельное ружьё.</pre>
+        </div>
+      </article>
     </section>
 
-    <section class="report card" id="report">
-      <h3>Interactivity checklist</h3>
-      <ul>
-        <li>Theme: Day/Night</li>
-        <li>Gallery: thumbnail clicks change main image</li>
-        <li>Read More: toggles extra text</li>
-        <li>Rating: click stars, visual & numeric update</li>
-        <li>Form: async submit simulation</li>
-        <li>Keyboard nav: menu arrows</li>
-        <li>Filter: switch with switch statement</li>
-        <li>Sound: notification using Web Audio</li>
-        <li>Animations: CSS transitions/transform</li>
-      </ul>
+    <!-- Простая контактная форма для демонстрации спиннера -->
+    <section class="demo-form">
+      <h2>Contact / Demo Form</h2>
+      <form id="contact-form">
+        <input type="text" id="name" placeholder="Ваше имя" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <textarea id="message" placeholder="Сообщение" required></textarea>
+        <button id="submit-btn" class="btn primary" type="submit">Отправить</button>
+      </form>
     </section>
+
   </main>
 
-<section class="container hidden" id="catalog">
-  <div class="catalog-grid">
-    <!-- Products will be added here dynamically -->
-  </div>
-</section>
+  <!-- Тост уведомления -->
+  <div id="notification" role="status" aria-live="polite"></div>
 
-
-
-  <footer>
-    Demo site — sells only non-lethal tactical gear and accessories.
-    <section class="container hidden" id="about">
-  <div class="product">
-    <h2>About TacticalGear</h2>
-    <p>We are a specialized retailer of high-quality tactical equipment and gear for outdoor activities, hiking, and training.</p>
-    
-    <h3>Our Mission</h3>
-    <p>To provide reliable and durable tactical gear for outdoor enthusiasts and professionals.</p>
-    
-    <h3>Contact Information</h3>
-    <p>Email: info@tacticalgear.example</p>
-    <p>Phone: (555) 123-4567</p>
-    <p>Address: 123 Tactical Street, Gear City</p>
-  </div>
-    </section>
-  </footer>
-
-  <!-- Login / Register modal (hidden by default) -->
-  <div id="authModal" class="modal" aria-hidden="true">
-    <div class="modal-content" role="dialog" aria-modal="true">
-      <button id="closeAuth" class="close">&times;</button>
-      <div class="auth-tabs">
-        <button id="tabLogin" class="tab active">Login</button>
-        <button id="tabRegister" class="tab">Register</button>
+  <footer class="site-footer">
+    <div class="stats">
+      <div>
+        <small>Registered users</small>
+        <div class="count-wrap"><span class="count" data-target="1200">0</span>+</div>
       </div>
-
-      <div id="loginForm" class="auth-form">
-        <h4>Login</h4>
-        <form id="formLogin">
-          <label>Email: <input name="email" type="email" required></label><br>
-          <label>Password: <input name="password" type="password" minlength="6" required></label><br>
-          <button class="btn" type="submit">Login</button>
-        </form>
+      <div>
+        <small>Products</small>
+        <div class="count-wrap"><span class="count" data-target="6">0</span></div>
       </div>
-
-      <div id="registerForm" class="auth-form hidden">
-        <h4>Register</h4>
-        <form id="formRegister">
-          <label>Name: <input name="name" required></label><br>
-          <label>Email: <input name="email" type="email" required></label><br>
-          <label>Password: <input name="password" type="password" minlength="6" required></label><br>
-          <label>Confirm: <input name="confirm" type="password" minlength="6" required></label><br>
-          <button class="btn" type="submit">Register</button>
-        </form>
-      </div>
-
-      <div id="authMsg" class="muted" role="status"></div>
     </div>
-  </div>
-  
-  <script src="js/auth.js" defer></script>
-  <script src="js/app.js" defer></script>
+    <p class="muted">ASTANA Mangilik El 49 c1.1.241K</p>
+  </footer>
 </body>
 </html>
