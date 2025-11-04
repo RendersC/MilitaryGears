@@ -6,6 +6,7 @@
   <title>FAQ — Military Store</title>
 
   <link rel="stylesheet" href="../styles/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script src="../js/script.js" defer></script>
 
   <style>
@@ -74,6 +75,19 @@
   <li role="none"><a role="menuitem" href="login.html">Login</a></li>
   <li role="none"><a role="menuitem" href="register.html">Register</a></li>
 </ul>
+
+
+      <div class="nav-actions">
+        <div class="search-wrap">
+          <input id="search-bar" type="search" placeholder="Поиск товаров..." aria-label="Search products">
+          <div id="suggestions" class="suggestions" aria-hidden="true"></div>
+        </div>
+
+        <button id="theme-toggle" class="btn theme-toggle" aria-pressed="false" title="Сменить тему">🌙</button>
+        <button id="open-cart" class="btn" title="Открыть корзину">🛒</button>
+
+        <button class="nav-burger" id="nav-burger" aria-label="Toggle menu" aria-expanded="false">☰</button>
+      </div>
     </div>
   </nav>
 
