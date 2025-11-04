@@ -14,24 +14,37 @@
   <!-- наш скрипт -->
   <script src="script.js" defer></script>
 </head>
-<body>
+<body>  <nav class="top-nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="logo-mark" aria-hidden="true">AK</span>
+        <span class="brand-text">Military Store</span>
+      </a>
+
+      <ul class="nav-links" role="menubar">
+        <li role="none"><a role="menuitem" href="index.html">Главная</a></li>
+        <li role="none"><a role="menuitem" href="gallery1.html">Галерея</a></li>
+        <li role="none"><a role="menuitem" href="#product-list">Каталог</a></li>
+        <li role="none"><a role="menuitem" href="#contact-form">Контакты</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <div class="search-wrap">
+          <input id="search-bar" type="search" placeholder="Поиск товаров..." aria-label="Search products">
+          <div id="suggestions" class="suggestions" aria-hidden="true"></div>
+        </div>
+
+        <button id="theme-toggle" class="btn theme-toggle" aria-pressed="false" title="Сменить тему">🌙</button>
+        <button id="open-cart" class="btn" title="Открыть корзину">🛒</button>
+
+        <button class="nav-burger" id="nav-burger" aria-label="Toggle menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </nav>
   <!-- Прогресс-бар скролла -->
   <div id="progress-bar" aria-hidden="true"></div>
 
-  <header class="site-header">
-    <div class="header-left">
-      <h1>Military Store</h1>
-      <div class="search-wrap">
-        <input id="search-bar" type="search" placeholder="Поиск товаров... (живой фильтр + подсказки)" aria-label="Search products">
-        <div id="suggestions" class="suggestions" aria-hidden="true"></div>
-      </div>
-    </div>
-
-    <div class="header-right">
-      <button id="theme-toggle" class="btn">🌙 Тёмная тема</button>
-      <button id="open-cart" class="btn">🛒 Корзина</button>
-    </div>
-  </header>
+ 
 
   <main class="container">
     <!-- фильтры кратко (demo) -->

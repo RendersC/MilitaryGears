@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Military Store — Галерея</title>
+
+  <!-- bootstrap (load first so custom styles can override) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- локальные стили (override Bootstrap & implement themes) -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- quick theme / ui improvements to ensure readability & animations even if style.css missing -->
+  <style>
+    :root{
+      --bg: #ffffff;
+      --card-bg: #f8f9fa;
+      --text: #111827;       /* darker text on light theme */
+      --muted: #6b7280;
+      --accent: #0d6efd;
+      --progress: rgba(13,110,253,0.9);
+      --suggest-bg: #fff;
+      --suggest-border: rgba(0,0,0,0.08);
+      --caption-bg: rgba(0,0,0,0.5);
+      color-scheme: light;
+    }
+
+    /* dark theme overrides */
+    :root[data-theme="dark"]{
+      --bg: #0b1220;
+      --card-bg: #0f1724;
+      --text: #f8fafc;       /* lighter text on dark theme */
+      --muted: #9ca3af;
+      --accent: #66b2ff;
+      --progress: rgba(102,178,255,0.95);
+      --suggest-bg: #0b1320;
+      --suggest-border: rgba(255,255,255,0.06);
+      --caption-bg: rgba(0,0,0,0.45);
+      color-scheme: dark;
+    }
+
+    /* smooth transitions for theme changes */
+    html, body, .top-nav, .site-footer, .nav-links a {
+      transition: background-color .22s ease, color .22s ease, border-color .22s ease;
+    }
+
+    body{
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .muted, .lead.muted { color: var(--muted); }
+
+    .top-nav{
+      background: var(--card-bg);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      padding: .6rem 1rem;
+    }
+    [data-theme="dark"] .top-nav { border-color: rgba(255,255,255,0.04); }
+
+    .brand-text { color: var(--text); }
+    .nav-links a { color: var(--text); text-decoration: none; padding: .5rem .75rem; display:inline-block; }
+    .nav-links a[aria-current="page"] { font-weight:600; color: var(--accent); }
+
+    /* progress bar */
+    #progress-bar{
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--progress), rgba(0,0,0,0));
+      width: 0;
+      z-index: 9999;
+      transition: width .12s linear, background-color .22s ease;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+    }
+
+    /* suggestions dropdown */
+    .suggestions{
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--suggest-bg);
+      border: 1px solid var(--suggest-border);
+      border-radius: 6px;
+      margin-top: .35rem;
+      padding: .25rem;
+      display: none;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      transform-origin: top;
+      opacity: 0;
+      transform: translateY(-6px);
+      transition: opacity .18s ease, transform .18s ease;
+      z-index: 1000;
+    }
+    .suggestions.show{
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .suggest-item{
+      padding: .45rem .6rem;
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--text);
+    }
+    .suggest-item:hover, .suggest-item:focus{
+      background: rgba(0,0,0,0.04);
+      outline: none;
+    }
+    [data-theme="dark"] .suggest-item:hover{ background: rgba(255,255,255,0.03); }
+
+    /* carousel caption more readable */
+    .carousel-caption{
+      background: linear-gradient(180deg, rgba(0,0,0,0) 0%, var(--caption-bg) 100%);
+      padding: .8rem 1rem;
+      border-radius: 6px;
+      backdrop-filter: blur(4px);
+      transition: background-color .22s ease, color .22s ease;
+    }
+
+    /* subtle hover for images & smaller screens */
+    .carousel-item img{
+      transition: transform .6s ease, filter .4s ease;
+      will-change: transform;
+      max-height: 60vh;
+      object-fit: cover;
+      width: 100%;
+    }
+    .carousel-item.active img{
+      transform: scale(1.02);
+    }
+    .carousel-inner { border-radius: 8px; overflow: hidden; }
+
+    /* footer & stats */
+    .site-footer{
+      background: var(--card-bg);
+      color: var(--muted);
+      padding: 1.25rem;
+      border-top: 1px solid rgba(0,0,0,0.04);
+      margin-top: 2rem;
+    }
+    [data-theme="dark"] .site-footer { border-top-color: rgba(255,255,255,0.03); }
+
+    /* small responsive fixes */
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+
+  </style>
+
+  <!-- jQuery (CDN) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+  <!-- наш скрипт (defer so DOM is ready) -->
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <nav class="top-nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner d-flex align-items-center justify-content-between">
+      <a class="brand d-flex align-items-center gap-2" href="index.html">
+        <span class="logo-mark" aria-hidden="true">AK</span>
+        <span class="brand-text">Military Store</span>
+      </a>
+
+      <ul class="nav-links d-flex gap-2" role="menubar">
+        <li role="none"><a role="menuitem" href="index.html">Главная</a></li>
+        <li role="none"><a role="menuitem" href="gallery1.html" aria-current="page">Галерея</a></li>
+        <li role="none"><a role="menuitem" href="#product-list">Каталог</a></li>
+        <li role="none"><a role="menuitem" href="#contact-form">Контакты</a></li>
+      </ul>
+
+      <div class="nav-actions d-flex align-items-center gap-2 position-relative">
+        <div class="search-wrap position-relative">
+          <input id="search-bar" type="search" placeholder="Поиск товаров..." aria-label="Search products" class="form-control form-control-sm">
+          <div id="suggestions" class="suggestions" aria-hidden="true"></div>
+        </div>
+
+        <button id="theme-toggle" class="btn btn-sm theme-toggle" aria-pressed="false" title="Сменить тему">🌙</button>
+        <button id="open-cart" class="btn btn-sm" title="Открыть корзину">🛒</button>
+
+        <button class="nav-burger btn btn-sm" id="nav-burger" aria-label="Toggle menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Прогресс-бар скролла -->
+  <div id="progress-bar" aria-hidden="true"></div>
+
+  <main class="container py-4">
+    <header class="text-center mb-4">
+      <h1>Галерея оружия</h1>
+      <p class="lead muted">Визуальная коллекция известных моделей</p>
+    </header>
+
+    <!-- Bootstrap Carousel -->
+    <div class="row justify-content-center mb-4">
+      <div class="col-12 col-md-10">
+        <div id="weaponCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#weaponCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#weaponCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#weaponCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <button type="button" data-bs-target="#weaponCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#weaponCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+            <button type="button" data-bs-target="#weaponCarousel" data-bs-slide-to="5" aria-label="Slide 6"></button>
+            <button type="button" data-bs-target="#weaponCarousel" data-bs-slide-to="6" aria-label="Slide 7"></button>
+            <button type="button" data-bs-target="#weaponCarousel" data-bs-slide-to="7" aria-label="Slide 8"></button>
+            <button type="button" data-bs-target="#weaponCarousel" data-bs-slide-to="8" aria-label="Slide 9"></button>
+          </div>
+
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="https://www.pragueranger.cz/upload/20241114220842-9012--800.webp" class="d-block w-100" alt="AK-47">
+              <div class="carousel-caption d-none d-md-block"><h5>AK-47</h5></div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://static.diffen.com/uploadz/0/0f/m4-carbine.jpg" class="d-block w-100" alt="M4A1">
+              <div class="carousel-caption d-none d-md-block"><h5>M4A1</h5></div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://www.pragueranger.cz/upload/20250514112535-7896-1200-675.webp" class="d-block w-100" alt="MP5">
+              <div class="carousel-caption d-none d-md-block"><h5>MP5</h5></div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://cdnammoclub.ammoforsale.com/ammo-club/media/DSC08507-scaled.jpg" class="d-block w-100" alt="Glock 17">
+              <div class="carousel-caption d-none d-md-block"><h5>Glock 17</h5></div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Simonow_SKS_45_noBG.jpg" class="d-block w-100" alt="SKS">
+              <div class="carousel-caption d-none d-md-block"><h5>SKS</h5></div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://cdn.kalashnikovgroup.ru/static/images/0/1/-/01-ak12sp-6356-3kh2-13399-1080.jpg" class="d-block w-100" alt="AK-12">
+              <div class="carousel-caption d-none d-md-block"><h5>AK-12</h5></div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://guns.club/upload/medialibrary/12b/sc8z1dbctznsjtp0zi7rsyuypjntnv68/unnamed-_1_.png" class="d-block w-100" alt="G36">
+              <div class="carousel-caption d-none d-md-block"><h5>G36</h5></div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://cdn-fastly.thefirearmblog.com/media/2024/05/19/14739919/fn-celebrates-fal-with-new-campaign-and-giveaway.jpg?size=1200x628" class="d-block w-100" alt="FN FAL">
+              <div class="carousel-caption d-none d-md-block"><h5>FN FAL</h5></div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://www.pragueranger.cz/upload/20250121145702-8063-800-450.webp" class="d-block w-100" alt="Steyr AUG">
+              <div class="carousel-caption d-none d-md-block"><h5>Steyr AUG</h5></div>
+            </div>
+          </div>
+
+          <button class="carousel-control-prev" type="button" data-bs-target="#weaponCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#weaponCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Контент/каталог можно добавить сюда (перенести из index.html при необходимости) -->
+  </main>
+
+  <div id="notification" role="status" aria-live="polite"></div>
+
+  <footer class="site-footer">
+    <div class="stats d-flex gap-3 justify-content-center mb-2">
+      <div class="text-center">
+        <small>Registered users</small>
+        <div class="count-wrap"><span class="count" data-target="1200">0</span>+</div>
+      </div>
+      <div class="text-center">
+        <small>Products</small>
+        <div class="count-wrap"><span class="count" data-target="6">0</span></div>
+      </div>
+    </div>
+    <p class="muted text-center mb-0">ASTANA Mangilik El 49 c1.1.241K</p>
+  </footer>
+
+  <!-- bootstrap JS for carousel -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- локальные небольшие скрипты: burger, theme, progress, suggestions -->
+  <script>
+    (function(){
+      // initialize theme from localStorage or prefers-color-scheme
+      const root = document.documentElement;
+      const themeBtn = document.getElementById('theme-toggle');
+      const saved = localStorage.getItem('theme');
+      if (saved) root.setAttribute('data-theme', saved);
+      else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        root.setAttribute('data-theme','dark');
+      }
+
+      function updateThemeButton(){
+        const isDark = root.getAttribute('data-theme') === 'dark';
+        themeBtn.setAttribute('aria-pressed', String(isDark));
+        themeBtn.textContent = isDark ? '☀️' : '🌙';
+        themeBtn.title = isDark ? 'Светлая тема' : 'Тёмная тема';
+      }
+      updateThemeButton();
+
+      themeBtn?.addEventListener('click', () => {
+        const isDark = root.getAttribute('data-theme') === 'dark';
+        if (isDark) { root.removeAttribute('data-theme'); localStorage.removeItem('theme'); }
+        else { root.setAttribute('data-theme','dark'); localStorage.setItem('theme','dark'); }
+        updateThemeButton();
+      });
+
+      // burger toggle for small screens
+      const burger = document.getElementById('nav-burger');
+      const links = document.querySelector('.nav-links');
+      burger?.addEventListener('click', () => {
+        const open = links.classList.toggle('open');
+        burger.setAttribute('aria-expanded', String(open));
+      });
+
+      // progress bar (throttle updates using requestAnimationFrame)
+      const prog = document.getElementById('progress-bar');
+      let ticking = false;
+      function onScroll(){
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          const h = document.documentElement;
+          const percent = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+          prog.style.width = Math.min(100, Math.max(0, percent)) + '%';
+          ticking = false;
+        });
+      }
+      window.addEventListener('scroll', onScroll, { passive:true });
+      onScroll();
+
+      // suggestions (improved show/hide with class)
+      const search = document.getElementById('search-bar');
+      const sugg = document.getElementById('suggestions');
+      const items = ['AK-47','M4A1','Glock-19','Desert Eagle','AWP','Shotgun','MP5','SKS','AK-12','G36','FN FAL','Steyr AUG'];
+
+      function hideSuggestions(){ sugg.classList.remove('show'); sugg.setAttribute('aria-hidden','true'); }
+      function showSuggestions(){ sugg.classList.add('show'); sugg.setAttribute('aria-hidden','false'); }
+
+      search?.addEventListener('input', () => {
+        const q = search.value.trim().toLowerCase();
+        if (!q) { hideSuggestions(); return; }
+        const matches = items.filter(i => i.toLowerCase().includes(q)).slice(0,6);
+        if (!matches.length) { hideSuggestions(); return; }
+        sugg.innerHTML = matches.map(m => '<div class="suggest-item" tabindex="0">'+m+'</div>').join('');
+        showSuggestions();
+      });
+
+      sugg?.addEventListener('click', (e) => {
+        const it = e.target.closest('.suggest-item');
+        if (!it) return;
+        search.value = it.textContent;
+        hideSuggestions();
+      });
+
+      // keyboard support for suggestion selection
+      search?.addEventListener('keydown', (e) => {
+        if (!sugg.classList.contains('show')) return;
+        const focus = document.activeElement;
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          const first = sugg.querySelector('.suggest-item');
+          first?.focus();
+        }
+      });
+      sugg?.addEventListener('keydown', (e) => {
+        const itemsEl = Array.from(sugg.querySelectorAll('.suggest-item'));
+        const idx = itemsEl.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown') { e.preventDefault(); itemsEl[Math.min(itemsEl.length-1, idx+1)]?.focus(); }
+        if (e.key === 'ArrowUp') { e.preventDefault(); itemsEl[Math.max(0, idx-1)]?.focus(); }
+        if (e.key === 'Enter') { e.preventDefault(); document.activeElement.click(); }
+        if (e.key === 'Escape') { hideSuggestions(); search.focus(); }
+      });
+
+      document.addEventListener('click', (e)=> {
+        if (!document.querySelector('.search-wrap')?.contains(e.target)) hideSuggestions();
+      });
+
+      // accessible little animation for count numbers (only if present)
+      document.querySelectorAll('.count').forEach(el => {
+        const target = Number(el.dataset.target || 0);
+        if (!target) { el.textContent = '0'; return; }
+        let cur = 0;
+        const step = Math.max(1, Math.floor(target / 50));
+        const id = setInterval(() => {
+          cur += step;
+          if (cur >= target) { cur = target; clearInterval(id); }
+          el.textContent = cur;
+        }, 18);
+      });
+
+      // small additional fix: ensure carousel images have alt text (already present) and reduce motion when requested
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.querySelectorAll('.carousel').forEach(c => c.setAttribute('data-bs-ride',''));
+      }
+    })();
+  </script>
+</body>
+</html></div>
