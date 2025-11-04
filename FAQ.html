@@ -5,17 +5,60 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>FAQ — Military Store</title>
 
-  <!-- Styles -->
   <link rel="stylesheet" href="style.css">
-
-  <!-- jQuery (CDN) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
-  <!-- Script -->
   <script src="script.js" defer></script>
+
+  <style>
+    /* можно оставить свои цвета и шрифты */
+    .faq-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    .faq-item {
+      background: var(--card, #fff);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      margin-bottom: 16px;
+      padding: 18px 20px;
+      transition: all 0.3s ease;
+    }
+    .faq-question {
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--accent, #2e5);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .faq-answer {
+      display: none;
+      margin-top: 10px;
+      color: var(--text, #333);
+      line-height: 1.6;
+    }
+    .faq-item.active .faq-answer {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .faq-toggle {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: var(--accent, #2e5);
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+    }
+  </style>
 </head>
 <body>
-  <!-- Navbar (copied from index.html) -->
+  <!-- Navbar -->
   <nav class="top-nav" role="navigation" aria-label="Main navigation">
     <div class="nav-inner">
       <a class="brand" href="index.html">
@@ -24,102 +67,78 @@
       </a>
 
       <ul class="nav-links" role="menubar">
-        <li role="none"><a role="menuitem" href="index.html">Home</a></li>
-        <li role="none"><a role="menuitem" href="gallery1.html">Gallery</a></li>
-        <li role="none"><a role="menuitem" href="index.html#product-list">Catalog</a></li>
-        <li role="none"><a role="menuitem" href="index.html#contact-form">Contacts</a></li>
-        <li role="none"><a role="menuitem" href="FAQ.html" class="active">FAQ</a></li>
-      </ul>
-
-      <div class="nav-actions">
-        <div class="search-wrap">
-          <input id="search-bar" type="search" placeholder="Search products..." aria-label="Search products">
-          <div id="suggestions" class="suggestions" aria-hidden="true"></div>
-        </div>
-
-        <button id="theme-toggle" class="btn theme-toggle" aria-pressed="false" title="Switch theme">🌙</button>
-        <button id="open-cart" class="btn" title="Open cart">🛒</button>
-
-        <button class="nav-burger" id="nav-burger" aria-label="Toggle menu" aria-expanded="false">☰</button>
-      </div>
+  <li role="none"><a role="menuitem" href="index.html">Main Page</a></li>
+  <li role="none"><a role="menuitem" href="gallery1.html">Gallery</a></li>
+  <li role="none"><a role="menuitem" href="about.html">About</a></li>
+  <li role="none"><a role="menuitem" href="FAQ.html">FAQ</a></li>
+  <li role="none"><a role="menuitem" href="login.html">Login</a></li>
+  <li role="none"><a role="menuitem" href="register.html">Register</a></li>
+</ul>
     </div>
   </nav>
 
-  <!-- Progress bar -->
-  <div id="progress-bar" aria-hidden="true"></div>
+  <!-- FAQ Section -->
+  <main class="faq-container">
+    <h1 style="text-align:center;margin-bottom:30px;">Frequently Asked Questions</h1>
 
-  <main class="container">
-    <h1>Frequently Asked Questions</h1>
-    <p class="muted">Find answers to the most common questions about Military Store.</p>
-
-    <section class="faq-section">
-      <div class="faq-item">
-        <h2>1. What is Military Store?</h2>
-        <p>Military Store is a demo project created for educational purposes. It showcases a simple e-commerce layout with products, filters, and a contact form.</p>
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>Is Military Store a legal business?</span>
+        <button class="faq-toggle">+</button>
       </div>
-
-      <div class="faq-item">
-        <h2>2. Can I actually buy products here?</h2>
-        <p>No, all products and prices are fictional. This site is a front-end learning example and does not involve real transactions.</p>
+      <div class="faq-answer">
+        Yes, Military Store operates strictly within local laws and regulations.  
+        All items listed comply with legal requirements for civilian or authorized professional purchase.
       </div>
+    </div>
 
-      <div class="faq-item">
-        <h2>3. How do I switch between light and dark themes?</h2>
-        <p>You can click the 🌙 button in the top right corner of the navigation bar to toggle between themes. Your choice will be remembered for your next visit.</p>
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>Can I order restricted items online?</span>
+        <button class="faq-toggle">+</button>
       </div>
+      <div class="faq-answer">
+        No, restricted or controlled items cannot be shipped directly without proper documentation.  
+        Buyers must provide licenses or identification according to regional laws before any transaction.
+      </div>
+    </div>
 
-      <div class="faq-item">
-        <h2>4. How does the rating system work?</h2>
-        <p>Each product has a 5-star rating system. You can click on a star to set your rating, which will be stored locally in your browser.</p>
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>Do you provide international shipping?</span>
+        <button class="faq-toggle">+</button>
       </div>
+      <div class="faq-answer">
+        Currently, Military Store serves domestic customers only.  
+        Export of regulated equipment requires additional permits and is handled case by case.
+      </div>
+    </div>
 
-      <div class="faq-item">
-        <h2>5. How can I contact support?</h2>
-        <p>You can fill out the contact form at the bottom of the main page. We’ll respond to your message as soon as possible.</p>
+    <div class="faq-item">
+      <div class="faq-question">
+        <span>How can I contact support?</span>
+        <button class="faq-toggle">+</button>
       </div>
-
-      <div class="faq-item">
-        <h2>6. What technologies are used?</h2>
-        <p>The project is built with HTML5, CSS3, and JavaScript (with jQuery). It’s designed to demonstrate clean, accessible, and responsive UI practices.</p>
+      <div class="faq-answer">
+        You can contact us through the form on the <a href="contacts.html">Contacts</a> page  
+        or send an email to <strong>support@militarystore.example</strong>.
       </div>
-    </section>
+    </div>
   </main>
 
   <footer class="site-footer">
-    <div class="stats">
-      <div>
-        <small>Registered users</small>
-        <div class="count-wrap"><span class="count" data-target="1200">0</span>+</div>
-      </div>
-      <div>
-        <small>Products</small>
-        <div class="count-wrap"><span class="count" data-target="6">0</span></div>
-      </div>
-    </div>
-    <p class="muted">ASTANA Mangilik El 49 c1.1.241K</p>
+    <p>© 2025 Military Store. All rights reserved.</p>
   </footer>
 
-  <style>
-    .faq-section {
-      background: var(--card);
-      padding: 24px;
-      border-radius: var(--radius);
-      box-shadow: 0 6px 26px rgba(10,20,30,0.06);
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      margin-top: 20px;
-    }
-    .faq-item h2 {
-      margin: 0;
-      font-size: 1.1rem;
-      color: var(--accent);
-    }
-    .faq-item p {
-      margin: 6px 0 0;
-      color: var(--text);
-      line-height: 1.5;
-    }
-  </style>
+  <script>
+    // Simple accordion
+    document.querySelectorAll(".faq-toggle").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const item = btn.closest(".faq-item");
+        item.classList.toggle("active");
+        btn.textContent = item.classList.contains("active") ? "−" : "+";
+      });
+    });
+  </script>
 </body>
 </html>

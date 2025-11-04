@@ -279,3 +279,18 @@ body{
   color:var(--card);
   filter:brightness(1.05);
 }
+
+
+.nav-links li:last-child a,
+.nav-links li:nth-last-child(2) a {
+  background: #2563eb;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.nav-links li:last-child a:hover,
+.nav-links li:nth-last-child(2) a:hover {
+  background: #1d4ed8;
+}

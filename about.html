@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>About — Military Store</title>
+
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+
+  <style>
+    .about-container {
+      max-width: 850px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    .about-item {
+      background: var(--card, #fff);
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      margin-bottom: 18px;
+      padding: 18px 20px;
+      transition: all 0.3s ease;
+    }
+    .about-question {
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--accent, #2e5);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .about-answer {
+      display: none;
+      margin-top: 10px;
+      color: var(--text, #333);
+      line-height: 1.6;
+    }
+    .about-item.active .about-answer {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .about-toggle {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      color: var(--accent, #2e5);
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="top-nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a class="brand" href="index.html">
+        <span class="logo-mark" aria-hidden="true">AK</span>
+        <span class="brand-text">Military Store</span>
+      </a>
+
+      <ul class="nav-links" role="menubar">
+  <li role="none"><a role="menuitem" href="index.html">Main Page</a></li>
+  <li role="none"><a role="menuitem" href="gallery1.html">Gallery</a></li>
+  <li role="none"><a role="menuitem" href="about.html">About</a></li>
+  <li role="none"><a role="menuitem" href="FAQ.html">FAQ</a></li>
+  <li role="none"><a role="menuitem" href="login.html">Login</a></li>
+  <li role="none"><a role="menuitem" href="register.html">Register</a></li>
+</ul>
+    </div>
+  </nav>
+
+  <!-- About Section -->
+  <main class="about-container">
+    <h1 style="text-align:center;margin-bottom:30px;">About Military Store</h1>
+
+    <div class="about-item">
+      <div class="about-question">
+        <span>Who We Are</span>
+        <button class="about-toggle">+</button>
+      </div>
+      <div class="about-answer">
+        Military Store is a trusted supplier of tactical gear and legal-grade equipment for professionals and enthusiasts.
+        We specialize in providing reliable, high-quality products that meet national safety standards and regulations.
+      </div>
+    </div>
+
+    <div class="about-item">
+      <div class="about-question">
+        <span>Our Mission</span>
+        <button class="about-toggle">+</button>
+      </div>
+      <div class="about-answer">
+        Our mission is to supply safe, durable, and tested military-grade equipment while maintaining full compliance
+        with the laws of our region. We aim to build a responsible community of customers who value safety and reliability.
+      </div>
+    </div>
+
+    <div class="about-item">
+      <div class="about-question">
+        <span>Our Vision</span>
+        <button class="about-toggle">+</button>
+      </div>
+      <div class="about-answer">
+        We envision a marketplace where customers can access professional tactical equipment easily and securely.
+        Our long-term goal is to expand responsibly while maintaining transparency and trust.
+      </div>
+    </div>
+
+    <div class="about-item">
+      <div class="about-question">
+        <span>Quality Standards</span>
+        <button class="about-toggle">+</button>
+      </div>
+      <div class="about-answer">
+        Every product we offer undergoes strict inspection to ensure compliance with safety and manufacturing regulations.
+        We work only with verified suppliers and certified distributors.
+      </div>
+    </div>
+
+    <div class="about-item">
+      <div class="about-question">
+        <span>Legal Compliance</span>
+        <button class="about-toggle">+</button>
+      </div>
+      <div class="about-answer">
+        Military Store operates within legal boundaries. Any product that requires a license or special permission
+        is sold strictly according to national law and only to authorized individuals or institutions.
+      </div>
+    </div>
+
+    <div class="about-item">
+      <div class="about-question">
+        <span>Contact & Partnerships</span>
+        <button class="about-toggle">+</button>
+      </div>
+      <div class="about-answer">
+        For partnership or business inquiries, please email us at
+        <strong>partners@militarystore.example</strong> or use the contact form on the
+        <a href="contacts.html">Contacts</a> page.
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2025 Military Store. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Expand / Collapse
+    document.querySelectorAll(".about-toggle").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const item = btn.closest(".about-item");
+        item.classList.toggle("active");
+        btn.textContent = item.classList.contains("active") ? "−" : "+";
+      });
+    });
+  </script>
+</body>
+</html>
