@@ -26,6 +26,25 @@ $(document).ready(function () {
   $('.product-card').each(function () { items.push($(this).data('name')); });
 
   /***********************
+   * CART (localStorage)
+   * - cart stored as JSON array under key 'cart'
+   * - each item: { id, name, price, qty }
+   ***********************/
+  function readCart() {
+    try { return JSON.parse(localStorage.getItem('cart') || '[]'); } catch (e) { return []; }
+  }
+  function writeCart(cart) { localStorage.setItem('cart', JSON.stringify(cart)); }
+  function cartCount() {
+    return readCart().reduce((s, it) => s + (it.qty || 0), 0);
+  }
+  function updateCartBadge() {
+    $('#cart-count').text(cartCount());
+  }
+
+  // init badge on load
+  updateCartBadge();
+
+  /***********************
    * TASK 1: LIVE SEARCH (keyup)
    ***********************/
   function applyFilters() {
@@ -156,8 +175,102 @@ $(document).ready(function () {
   }
   // Демонстрация: кнопки add-cart вызывают уведомление
   $(document).on('click', '.add-cart', function () {
+    const $card = $(this).closest('.product-card');
+    const id = $card.data('id');
+    const name = $card.data('name');
+    const price = parseFloat($card.data('price')) || 0;
+
+    const cart = readCart();
+    const found = cart.find(it => it.id === id);
+    if (found) {
+      found.qty = (found.qty || 1) + 1;
+    } else {
+      cart.push({ id, name, price, qty: 1 });
+    }
+    writeCart(cart);
+    updateCartBadge();
     showNotification('🛒 Товар добавлен в корзину');
-    // можно имплементировать добавление в корзину (localStorage) — опционально
+  });
+
+  // open cart - simple preview modal (alert fallback)
+  // CART MODAL: render and handlers
+  function renderCartModal() {
+    const cart = readCart();
+    const $body = $('#cart-contents');
+    $body.empty();
+    if (!cart.length) {
+      $body.append('<p class="muted">Ваша корзина пуста.</p>');
+      $('#cart-total').text('₸0');
+      return;
+    }
+    cart.forEach(it => {
+      const row = $(
+        `<div class="cart-item" data-id="${it.id}">
+          <div class="info">
+            <div class="title">${it.name}</div>
+            <div class="price">₸${it.price}</div>
+          </div>
+          <div class="cart-qty">
+            <button class="qty-btn qty-decrease" aria-label="Decrease">−</button>
+            <div class="qty-label">${it.qty}</div>
+            <button class="qty-btn qty-increase" aria-label="Increase">+</button>
+          </div>
+        </div>`
+      );
+      $body.append(row);
+    });
+    const total = cart.reduce((s, it) => s + (it.price * it.qty), 0);
+    $('#cart-total').text('₸' + total);
+  }
+
+  function openCartModal() {
+    renderCartModal();
+    $('#cart-modal').attr('aria-hidden', 'false');
+  }
+  function closeCartModal() {
+    $('#cart-modal').attr('aria-hidden', 'true');
+  }
+
+  $('#open-cart').on('click', function () {
+    openCartModal();
+  });
+  $('#close-cart, #cart-backdrop').on('click', function () { closeCartModal(); });
+
+  // qty change handlers (delegated)
+  $(document).on('click', '.qty-increase, .qty-decrease', function () {
+    const $btn = $(this);
+    const $item = $btn.closest('.cart-item');
+    const id = $item.data('id');
+    const cart = readCart();
+    const found = cart.find(it => it.id === id);
+    if (!found) return;
+    if ($btn.hasClass('qty-increase')) found.qty = (found.qty || 0) + 1;
+    else found.qty = Math.max(0, (found.qty || 0) - 1);
+    // remove items with qty 0
+    const newCart = cart.filter(it => it.qty > 0);
+    writeCart(newCart);
+    updateCartBadge();
+    renderCartModal();
+  });
+
+  // clear / checkout
+  $('#clear-cart').on('click', function () {
+    writeCart([]);
+    updateCartBadge();
+    renderCartModal();
+    showNotification('Корзина очищена');
+  });
+  $('#checkout').on('click', function () {
+    // demo: show total and clear
+    const total = readCart().reduce((s, it) => s + it.price * it.qty, 0);
+    if (!total) return showNotification('Корзина пуста');
+    if (confirm('Оформить заказ на сумму ₸' + total + '?')) {
+      writeCart([]);
+      updateCartBadge();
+      renderCartModal();
+      closeCartModal();
+      showNotification('Заказ оформлен (демо)');
+    }
   });
 
   /***********************

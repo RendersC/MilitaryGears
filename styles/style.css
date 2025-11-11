@@ -97,6 +97,16 @@ body{
   gap:18px;
 }
 
+/* keep grid content centered and cards at a stable width
+   so a single matching card doesn't stretch to full width */
+.grid{ justify-content: center; }
+
+.product-card{
+  width:100%;
+  max-width:380px; /* standard card width */
+  margin:0 auto;
+}
+
 /* card */
 .product-card{
   background:var(--card);
@@ -175,7 +185,6 @@ body{
   .site-header{flex-direction:column;align-items:flex-start;gap:12px}
   .header-right{display:flex;gap:8px;width:100%}
 }
-// ...existing code...
 /* NAVBAR (theme-aware) */
 .top-nav{
   position:sticky;
@@ -280,6 +289,23 @@ body{
   filter:brightness(1.05);
 }
 
+/* cart count badge */
+.count-badge{
+  display:inline-block;
+  min-width:18px;
+  padding:2px 6px;
+  margin-left:6px;
+  border-radius:999px;
+  font-size:0.75rem;
+  font-weight:700;
+  line-height:1;
+  vertical-align:middle;
+  background:#e11d48; /* red by default */
+  color:#fff;
+}
+
+[data-theme="dark"] .count-badge{ background:#ef4444; }
+
 
 .nav-links li:last-child a,
 .nav-links li:nth-last-child(2) a {
@@ -294,3 +320,39 @@ body{
 .nav-links li:nth-last-child(2) a:hover {
   background: #1d4ed8;
 }
+
+/* Cart modal styles */
+.cart-modal{ display:none; position:fixed; inset:0; z-index:1500; }
+.cart-modal[aria-hidden="false"]{ display:block; }
+.cart-modal-backdrop{ position:absolute; inset:0; background:rgba(2,6,23,0.6); }
+.cart-modal-panel{ position:fixed; right:16px; top:64px; width:360px; max-height:70vh; background:var(--card); color:var(--text); border-radius:12px; box-shadow:0 18px 60px rgba(2,6,23,0.5); overflow:hidden; display:flex; flex-direction:column; z-index:1600; }
+.cart-modal-header{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:12px 14px; border-bottom:1px solid rgba(0,0,0,0.06); }
+.cart-modal-body{ padding:10px 12px; overflow:auto; flex:1; }
+.cart-item{ display:flex; gap:10px; align-items:center; padding:8px 0; border-bottom:1px dashed rgba(0,0,0,0.04); }
+.cart-item .title{ font-weight:700; }
+.cart-qty{ display:flex; gap:6px; align-items:center; }
+.cart-modal-footer{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:12px; border-top:1px solid rgba(0,0,0,0.06); }
+.cart-actions{ display:flex; gap:8px; }
+
+/* Buttons: ensure Add/Copy have visible outlines in both themes */
+.add-cart, .copy-btn, .btn{
+  border:1px solid transparent;
+}
+
+/* Light theme button outlines */
+html:not([data-theme="dark"]) .add-cart,
+html:not([data-theme="dark"]) .copy-btn{
+  border-color: rgba(0,0,0,0.8);
+  color: var(--text);
+}
+
+/* Dark theme button outlines and light text */
+[data-theme="dark"] .add-cart,
+[data-theme="dark"] .copy-btn{
+  border-color: rgba(255,255,255,0.12);
+  color: #f8fafc; /* light text */
+}
+
+/* small helpers for qty buttons inside modal */
+.qty-btn{ padding:4px 8px; border-radius:6px; border:1px solid rgba(0,0,0,0.08); background:transparent; cursor:pointer; }
+[data-theme="dark"] .qty-btn{ border-color: rgba(255,255,255,0.06); color:var(--text); }

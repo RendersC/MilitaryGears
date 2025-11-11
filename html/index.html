@@ -39,7 +39,7 @@
         </div>
 
         <button id="theme-toggle" class="btn theme-toggle" aria-pressed="false" title="Сменить тему">🌙</button>
-        <button id="open-cart" class="btn" title="Открыть корзину">🛒</button>
+  <button id="open-cart" class="btn" title="Открыть корзину">🛒 <span id="cart-count" class="count-badge" aria-hidden="true">0</span></button>
 
         <button class="nav-burger" id="nav-burger" aria-label="Toggle menu" aria-expanded="false">☰</button>
       </div>
@@ -262,6 +262,27 @@
     </section>
 
   </main>
+
+  <!-- Cart modal -->
+  <div id="cart-modal" class="cart-modal" aria-hidden="true" role="dialog" aria-label="Cart">
+    <div class="cart-modal-backdrop" id="cart-backdrop"></div>
+    <div class="cart-modal-panel" role="document">
+      <header class="cart-modal-header">
+        <h2>Ваша корзина</h2>
+        <button id="close-cart" class="btn" aria-label="Close cart">✕</button>
+      </header>
+      <div class="cart-modal-body" id="cart-contents">
+        <!-- items will be injected here -->
+      </div>
+      <footer class="cart-modal-footer">
+        <div class="cart-total">Итого: <span id="cart-total">₸0</span></div>
+        <div class="cart-actions">
+          <button id="clear-cart" class="btn">Очистить</button>
+          <button id="checkout" class="btn primary">Оформить</button>
+        </div>
+      </footer>
+    </div>
+  </div>
 
   <!-- Тост уведомления -->
   <div id="notification" role="status" aria-live="polite"></div>
