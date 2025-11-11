@@ -426,6 +426,50 @@ $(document).ready(function () {
     suggestTimer = setTimeout(updateSuggestions, 160);
   });
 
+  /***********************
+   * FOOTER WEATHER (Open-Meteo, no API key)
+   ***********************/
+  function mapWeatherCodeToText(code) {
+    // Map Open-Meteo weathercode to Russian description
+    if (code === 0) return { text: 'Солнечно', icon: '☀️' };
+    if (code === 1 || code === 2) return { text: 'Малооблачно', icon: '⛅' };
+    if (code === 3) return { text: 'Облачно', icon: '☁️' };
+    if (code === 45 || code === 48) return { text: 'Туман', icon: '🌫️' };
+    if ([51,53,55,56,57].includes(code)) return { text: 'Морось', icon: '🌦️' };
+    if ([61,63,65,66,67].includes(code)) return { text: 'Дождь', icon: '🌧️' };
+    if ([71,73,75,77,85,86].includes(code)) return { text: 'Снег', icon: '🌨️' };
+    if ([95,96,99].includes(code)) return { text: 'Гроза', icon: '🌩️' };
+    return { text: 'Неизвестно', icon: '🌈' };
+  }
+
+  function fetchWeather(lat, lon) {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`;
+    $.getJSON(url).done(function (data) {
+      if (data && data.current_weather) {
+        const w = data.current_weather;
+        const mapped = mapWeatherCodeToText(w.weathercode);
+        $('#weather .weather-icon').text(mapped.icon);
+        $('#weather .weather-text').text(mapped.text + ' · ' + Math.round(w.temperature) + '°C');
+      } else {
+        $('#weather .weather-text').text('Погода недоступна');
+      }
+    }).fail(function () {
+      $('#weather .weather-text').text('Ошибка загрузки погоды');
+    });
+  }
+
+  // Try geolocation first, fallback to Astana coordinates
+  const defaultCoords = { lat: 51.169392, lon: 71.449074 };
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (pos) {
+      fetchWeather(pos.coords.latitude, pos.coords.longitude);
+    }, function () {
+      fetchWeather(defaultCoords.lat, defaultCoords.lon);
+    }, { timeout: 5000 });
+  } else {
+    fetchWeather(defaultCoords.lat, defaultCoords.lon);
+  }
+
   // initial filter (на случай, если параметры заданы)
   applyFilters();
 });

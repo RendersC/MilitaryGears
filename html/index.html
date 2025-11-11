@@ -7,12 +7,10 @@
 
   <!-- стили -->
   <link rel="stylesheet" href="../styles/style.css">
-  <script src="../js/script.js" defer></script>
-
   <!-- jQuery (CDN) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" defer></script>
   <!-- наш скрипт -->
+  <script src="../js/script.js" defer></script>
  
 </head>
 <body>  <nav class="top-nav" role="navigation" aria-label="Main navigation">
@@ -298,7 +296,13 @@
         <div class="count-wrap"><span class="count" data-target="6">0</span></div>
       </div>
     </div>
-    <p class="muted">ASTANA Mangilik El 49 c1.1.241K</p>
+    <div class="footer-row">
+      <p class="muted">ASTANA Mangilik El 49 c1.1.241K</p>
+      <div id="weather" class="weather" aria-live="polite">
+        <span class="weather-icon">☀️</span>
+        <span class="weather-text">Загрузка погоды...</span>
+      </div>
+    </div>
   </footer>
 </body>
 </html>
